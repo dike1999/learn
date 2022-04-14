@@ -3,26 +3,17 @@ import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <nav></nav>
-    </div>
-  </header>
   <el-row>
     <el-col :span="8">
-      <div class="grid-content bg-purple">
-        <RouterLink to="/">Home</RouterLink>
-      </div>
+      <RouterLink class="grid-content bg-purple" to="/">Home</RouterLink>
     </el-col>
     <el-col :span="8">
-      <div class="grid-content bg-purple-light">
-        <RouterLink to="/webrtc">WebRTC</RouterLink>
-      </div>
+      <RouterLink class="grid-content bg-purple-light" to="/webrtc">
+        WebRTC
+      </RouterLink>
     </el-col>
     <el-col :span="8">
-      <div class="grid-content bg-purple">
-        <RouterLink to="/three">Three</RouterLink>
-      </div>
+      <RouterLink class="grid-content bg-purple" to="/three">Three</RouterLink>
     </el-col>
   </el-row>
   <RouterView />
@@ -41,17 +32,17 @@ import { RouterLink, RouterView } from "vue-router";
   &:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
   }
+}
 
-  a {
-    font-size: larger;
-    text-decoration: none;
-    color: rgb(17, 15, 15);
-  }
+a {
+  font-size: larger;
+  text-decoration: none;
+  color: rgb(17, 15, 15);
+}
 
-  .router-link-active {
-    text-decoration: none;
-    color: #0c3bf8;
-  }
+.router-link-active {
+  text-decoration: none;
+  color: #0c3bf8;
 }
 
 .bg-purple {
