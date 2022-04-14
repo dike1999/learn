@@ -38,14 +38,19 @@ import { RouterLink, RouterView } from "vue-router";
   border-radius: 4px;
   min-height: 36px;
 
+  &:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+
   a {
     font-size: larger;
     text-decoration: none;
-    color: rgb(10, 10, 10);
+    color: rgb(17, 15, 15);
+  }
 
-    &:hover {
-      background-color: hsla(160, 100%, 37%, 0.2);
-    }
+  .router-link-active {
+    text-decoration: none;
+    color: #0c3bf8;
   }
 }
 
