@@ -5,15 +5,15 @@ import { RouterLink, RouterView } from "vue-router";
 <template>
   <el-row>
     <el-col :span="8">
-      <RouterLink class="grid-content bg-purple" to="/">Home</RouterLink>
-    </el-col>
-    <el-col :span="8">
       <RouterLink class="grid-content bg-purple-light" to="/webrtc">
         WebRTC
       </RouterLink>
     </el-col>
     <el-col :span="8">
       <RouterLink class="grid-content bg-purple" to="/three">Three</RouterLink>
+    </el-col>
+    <el-col :span="8">
+      <RouterLink class="grid-content bg-purple-light" to="/">Home</RouterLink>
     </el-col>
   </el-row>
   <RouterView />
