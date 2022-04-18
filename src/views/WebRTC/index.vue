@@ -39,70 +39,108 @@
         </el-select>
       </div>
     </div>
+    <el-button type="primary" @click="snapshot">截图</el-button>
   </div>
   <div>{{ errMsg }}</div>
+
+  <el-button type="text" @click="centerDialogVisible = true"
+    >Click to open the Dialog</el-button
+  >
+  <el-dialog v-model="centerDialogVisible" title="Warning" width="30%" center>
+    <span>请确认是否开启WebRTC功能</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="handleCancel"> 取消 </el-button>
+        <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, reactive } from "vue";
+import { onUnmounted, ref, reactive } from "vue";
 
+const centerDialogVisible = ref(true);
 const player = ref<HTMLMediaElement | null>(null);
 
 const audioSource = reactive<MediaDeviceInfo[]>([]);
-const audioSourceValue = ref("");
+const audioSourceValue = ref();
 const audioOutput = reactive<MediaDeviceInfo[]>([]);
-const audioOutputValue = ref("");
+const audioOutputValue = ref();
 const videoSource = reactive<MediaDeviceInfo[]>([]);
-const videoSourceValue = ref("");
-
+const videoSourceValue = ref();
+const mediaStreamTrack = ref<MediaStream>({} as MediaStream);
 const errMsg = ref("");
 
-const mediaStreamTrack = ref<MediaStream>({} as MediaStream);
+const setMediaStream = (stream: MediaStream) => {
+  mediaStreamTrack.value = stream;
+  if (player.value) player.value.srcObject = stream;
+  return navigator.mediaDevices.enumerateDevices();
+};
 
-onMounted(() => {
+const setDevicesInfo = (deviceinfo: MediaDeviceInfo[]) => {
+  deviceinfo.forEach((device) => {
+    if (device.kind === "audioinput") {
+      audioSource.push(device);
+      if (device.deviceId === "default") {
+        audioSourceValue.value = device.deviceId;
+      }
+    } else if (device.kind === "audiooutput") {
+      audioOutput.push(device);
+      if (device.deviceId === "default") {
+        audioOutputValue.value = device.deviceId;
+      }
+    } else if (device.kind === "videoinput") {
+      videoSource.push(device);
+      if (!videoSourceValue.value) {
+        videoSourceValue.value = device.deviceId;
+      }
+    }
+  });
+};
+
+const initVideo = () => {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     errMsg.value = "getUserMedia is not supported";
   } else {
+    const constraints = {
+      video: {
+        width: 200,
+        height: 200,
+        frameRate: 60,
+        facingMode: "enviroment",
+      },
+      audio: {
+        noiseSuppression: true,
+        echoCancellation: true,
+      },
+    };
     navigator.mediaDevices
-      .getUserMedia({
-        video: {
-          width: 200,
-          height: 200,
-          frameRate: 60,
-          facingMode: "enviroment",
-        },
-        audio: true,
-      })
-      .then((stream) => {
-        mediaStreamTrack.value = stream;
-        if (player.value) player.value.srcObject = stream;
-        return navigator.mediaDevices.enumerateDevices();
-      })
-      .then((deviceinfo) => {
-        deviceinfo.forEach((device) => {
-          if (device.kind === "audioinput") {
-            audioSource.push(device);
-            if (device.deviceId === "default") {
-              audioSourceValue.value = device.deviceId;
-            }
-          } else if (device.kind === "audiooutput") {
-            audioOutput.push(device);
-            if (device.deviceId === "default") {
-              audioOutputValue.value = device.deviceId;
-            }
-          } else if (device.kind === "videoinput") {
-            videoSource.push(device);
-            if (videoSourceValue.value === "") {
-              videoSourceValue.value = device.deviceId;
-            }
-          }
-        });
-      })
+      .getUserMedia(constraints)
+      .then(setMediaStream)
+      .then(setDevicesInfo)
       .catch((err) => {
         errMsg.value = err;
       });
   }
-});
+};
+
+const handleCancel = () => {
+  centerDialogVisible.value = false;
+  if (mediaStreamTrack.value.getTracks) {
+    mediaStreamTrack.value.getTracks()[0].stop();
+    mediaStreamTrack.value.getTracks()[1].stop();
+  }
+};
+
+const handleConfirm = () => {
+  centerDialogVisible.value = false;
+  initVideo();
+};
+
+const snapshot = () => {
+  console.log("TODO: 截图");
+};
 
 onUnmounted(() => {
   if (mediaStreamTrack.value) {
