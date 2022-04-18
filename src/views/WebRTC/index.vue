@@ -5,38 +5,38 @@
     <div style="display: flex">
       <div>
         <label>audio Source:</label>
-        <select id="audioSource">
-          <option
+        <el-select v-model="audioSourceValue" class="m-2" placeholder="Select">
+          <el-option
             v-for="item in audioSource"
-            :value="item.deviceId"
-            :text="item.label"
             :key="item.deviceId"
+            :label="item.label"
+            :value="item.deviceId"
           />
-        </select>
+        </el-select>
       </div>
 
       <div>
         <label>audio Output:</label>
-        <select id="audioOutput">
-          <option
+        <el-select v-model="audioOutputValue" class="m-2" placeholder="Select">
+          <el-option
             v-for="item in audioOutput"
-            :value="item.deviceId"
-            :text="item.label"
             :key="item.deviceId"
+            :label="item.label"
+            :value="item.deviceId"
           />
-        </select>
+        </el-select>
       </div>
 
       <div>
         <label>video Source:</label>
-        <select id="videoSource">
-          <option
+        <el-select v-model="videoSourceValue" class="m-2" placeholder="Select">
+          <el-option
             v-for="item in videoSource"
-            :value="item.deviceId"
-            :text="item.label"
             :key="item.deviceId"
+            :label="item.label"
+            :value="item.deviceId"
           />
-        </select>
+        </el-select>
       </div>
     </div>
   </div>
@@ -48,8 +48,11 @@ import { onMounted, ref, reactive } from "vue";
 
 const player = ref<HTMLMediaElement | null>(null);
 const audioSource = reactive<MediaDeviceInfo[]>([]);
+const audioSourceValue = ref("");
 const audioOutput = reactive<MediaDeviceInfo[]>([]);
+const audioOutputValue = ref("");
 const videoSource = reactive<MediaDeviceInfo[]>([]);
+const videoSourceValue = ref("");
 const errMsg = ref("");
 
 onMounted(() => {
@@ -66,10 +69,19 @@ onMounted(() => {
         deviceinfo.forEach((device) => {
           if (device.kind === "audioinput") {
             audioSource.push(device);
+            if (device.deviceId === "default") {
+              audioSourceValue.value = device.deviceId;
+            }
           } else if (device.kind === "audiooutput") {
             audioOutput.push(device);
+            if (device.deviceId === "default") {
+              audioOutputValue.value = device.deviceId;
+            }
           } else if (device.kind === "videoinput") {
             videoSource.push(device);
+            if (device.deviceId === "default") {
+              videoSourceValue.value = device.deviceId;
+            }
           }
         });
       })
