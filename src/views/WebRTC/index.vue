@@ -43,18 +43,21 @@
   </div>
   <div>{{ errMsg }}</div>
 
-  <el-button type="text" @click="centerDialogVisible = true"
-    >Click to open the Dialog</el-button
-  >
-  <el-dialog v-model="centerDialogVisible" title="Warning" width="30%" center>
-    <span>请确认是否开启WebRTC功能</span>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="handleCancel"> 取消 </el-button>
-        <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
-      </span>
-    </template>
-  </el-dialog>
+  <div class="dialog">
+    <el-button type="text" @click="centerDialogVisible = true"
+      >Click to open the Dialog</el-button
+    >
+    <el-dialog v-model="centerDialogVisible" title="Warning" width="30%" center>
+      <span>请确认是否开启WebRTC功能</span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="handleCancel"> 取消 </el-button>
+          <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </div>
+  <canvas width="200" height="200" ref="picture" />
 </template>
 
 <script setup lang="ts">
@@ -62,6 +65,7 @@ import { onUnmounted, ref, reactive } from "vue";
 
 const centerDialogVisible = ref(true);
 const player = ref<HTMLMediaElement | null>(null);
+const picture = ref<HTMLCanvasElement | null>(null);
 
 const audioSource = reactive<MediaDeviceInfo[]>([]);
 const audioSourceValue = ref();
@@ -139,7 +143,9 @@ const handleConfirm = () => {
 };
 
 const handleSnapshot = () => {
-  console.log("TODO: 截图");
+  picture.value
+    ?.getContext("2d")
+    ?.drawImage(player?.value as HTMLVideoElement, 0, 0, 200, 200);
 };
 
 onUnmounted(() => {
