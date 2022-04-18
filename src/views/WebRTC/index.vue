@@ -1,7 +1,7 @@
 <template>
   <div class="webRTC">
     <h1>This is an WebRTC page</h1>
-    <video autoplay id="player" ref="player" />
+    <video width="200" height="200" autoplay id="player" ref="player" />
     <div style="display: flex">
       <div>
         <label>audio Source:</label>
@@ -39,7 +39,7 @@
         </el-select>
       </div>
     </div>
-    <el-button type="primary" @click="snapshot">截图</el-button>
+    <el-button type="primary" @click="handleSnapshot">截图</el-button>
   </div>
   <div>{{ errMsg }}</div>
 
@@ -138,7 +138,7 @@ const handleConfirm = () => {
   initVideo();
 };
 
-const snapshot = () => {
+const handleSnapshot = () => {
   console.log("TODO: 截图");
 };
 
