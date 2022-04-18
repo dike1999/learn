@@ -21,6 +21,11 @@ const router = createRouter({
       name: "three",
       component: () => import("../views/Three/index.vue"),
     },
+    {
+      path: "/chatroom",
+      name: "ChatRoom",
+      component: () => import("../views/ChatRoom/index.vue"),
+    },
   ],
 });
 

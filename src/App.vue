@@ -4,16 +4,23 @@ import { RouterLink, RouterView } from "vue-router";
 
 <template>
   <el-row>
-    <el-col :span="8">
-      <RouterLink class="grid-content bg-purple-light" to="/webrtc">
+    <el-col :span="6">
+      <RouterLink class="grid-content bg-purple-light" to="/chatroom">
+        ChatRoom
+      </RouterLink>
+    </el-col>
+    <el-col :span="6">
+      <RouterLink class="grid-content bg-purple" to="/webrtc">
         WebRTC
       </RouterLink>
     </el-col>
-    <el-col :span="8">
-      <RouterLink class="grid-content bg-purple" to="/three">Three</RouterLink>
+    <el-col :span="6">
+      <RouterLink class="grid-content bg-purple-light" to="/three">
+        Three
+      </RouterLink>
     </el-col>
-    <el-col :span="8">
-      <RouterLink class="grid-content bg-purple-light" to="/">Home</RouterLink>
+    <el-col :span="6">
+      <RouterLink class="grid-content bg-purple" to="/">Home</RouterLink>
     </el-col>
   </el-row>
   <RouterView />
