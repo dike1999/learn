@@ -79,7 +79,7 @@ onMounted(() => {
             }
           } else if (device.kind === "videoinput") {
             videoSource.push(device);
-            if (device.deviceId === "default") {
+            if (videoSourceValue.value === "") {
               videoSourceValue.value = device.deviceId;
             }
           }
