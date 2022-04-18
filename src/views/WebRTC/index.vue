@@ -7,7 +7,7 @@
         <label>audio Source:</label>
         <el-select v-model="audioSourceValue" class="m-2" placeholder="Select">
           <el-option
-            v-for="item in audioSource"
+            v-for="item in devicesInfo.audioSource"
             :key="item.deviceId"
             :label="item.label"
             :value="item.deviceId"
@@ -19,7 +19,7 @@
         <label>audio Output:</label>
         <el-select v-model="audioOutputValue" class="m-2" placeholder="Select">
           <el-option
-            v-for="item in audioOutput"
+            v-for="item in devicesInfo.audioOutput"
             :key="item.deviceId"
             :label="item.label"
             :value="item.deviceId"
@@ -31,7 +31,7 @@
         <label>video Source:</label>
         <el-select v-model="videoSourceValue" class="m-2" placeholder="Select">
           <el-option
-            v-for="item in videoSource"
+            v-for="item in devicesInfo.videoSource"
             :key="item.deviceId"
             :label="item.label"
             :value="item.deviceId"
@@ -67,14 +67,17 @@ const centerDialogVisible = ref(true);
 const player = ref<HTMLMediaElement | null>(null);
 const picture = ref<HTMLCanvasElement | null>(null);
 
-const audioSource = reactive<MediaDeviceInfo[]>([]);
 const audioSourceValue = ref();
-const audioOutput = reactive<MediaDeviceInfo[]>([]);
 const audioOutputValue = ref();
-const videoSource = reactive<MediaDeviceInfo[]>([]);
 const videoSourceValue = ref();
 const mediaStreamTrack = ref<MediaStream>({} as MediaStream);
 const errMsg = ref("");
+
+const devicesInfo = reactive({
+  audioSource: [] as MediaDeviceInfo[],
+  audioOutput: [] as MediaDeviceInfo[],
+  videoSource: [] as MediaDeviceInfo[],
+});
 
 const setMediaStream = (stream: MediaStream) => {
   mediaStreamTrack.value = stream;
@@ -83,6 +86,9 @@ const setMediaStream = (stream: MediaStream) => {
 };
 
 const setDevicesInfo = (deviceinfo: MediaDeviceInfo[]) => {
+  const audioSource: MediaDeviceInfo[] = [];
+  const audioOutput: MediaDeviceInfo[] = [];
+  const videoSource: MediaDeviceInfo[] = [];
   deviceinfo.forEach((device) => {
     if (device.kind === "audioinput") {
       audioSource.push(device);
@@ -100,6 +106,10 @@ const setDevicesInfo = (deviceinfo: MediaDeviceInfo[]) => {
         videoSourceValue.value = device.deviceId;
       }
     }
+
+    devicesInfo.audioOutput = audioOutput;
+    devicesInfo.audioSource = audioSource;
+    devicesInfo.videoSource = videoSource;
   });
 };
 
@@ -107,20 +117,19 @@ const initVideo = () => {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     errMsg.value = "getUserMedia is not supported";
   } else {
-    const constraints = {
-      video: {
-        width: 200,
-        height: 200,
-        frameRate: 60,
-        facingMode: "enviroment",
-      },
-      audio: {
-        noiseSuppression: true,
-        echoCancellation: true,
-      },
-    };
     navigator.mediaDevices
-      .getUserMedia(constraints)
+      .getUserMedia({
+        video: {
+          width: 200,
+          height: 200,
+          frameRate: 60,
+          facingMode: "enviroment",
+        },
+        audio: {
+          noiseSuppression: true,
+          echoCancellation: true,
+        },
+      })
       .then(setMediaStream)
       .then(setDevicesInfo)
       .catch((err) => {
