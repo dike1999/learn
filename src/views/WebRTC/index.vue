@@ -5,7 +5,12 @@
     <div style="display: flex">
       <div>
         <label>audio Source:</label>
-        <el-select v-model="audioSourceValue" class="m-2" placeholder="Select">
+        <el-select
+          disabled
+          v-model="audioSourceValue"
+          class="m-2"
+          placeholder="Select"
+        >
           <el-option
             v-for="item in devicesInfo.audioSource"
             :key="item.deviceId"
@@ -17,7 +22,12 @@
 
       <div>
         <label>audio Output:</label>
-        <el-select v-model="audioOutputValue" class="m-2" placeholder="Select">
+        <el-select
+          disabled
+          v-model="audioOutputValue"
+          class="m-2"
+          placeholder="Select"
+        >
           <el-option
             v-for="item in devicesInfo.audioOutput"
             :key="item.deviceId"
@@ -61,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, ref, reactive } from "vue";
+import { onUnmounted, ref, reactive, watch } from "vue";
 
 const centerDialogVisible = ref(true);
 const player = ref<HTMLMediaElement | null>(null);
@@ -113,7 +123,11 @@ const setDevicesInfo = (deviceinfo: MediaDeviceInfo[]) => {
   });
 };
 
-const initVideo = () => {
+const initVideo = ({
+  videoId = undefined,
+}: {
+  videoId: string | undefined;
+}) => {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     errMsg.value = "getUserMedia is not supported";
   } else {
@@ -124,11 +138,9 @@ const initVideo = () => {
           height: 200,
           frameRate: 60,
           facingMode: "enviroment",
+          deviceId: videoId,
         },
-        audio: {
-          noiseSuppression: true,
-          echoCancellation: true,
-        },
+        audio: false,
       })
       .then(setMediaStream)
       .then(setDevicesInfo)
@@ -148,7 +160,9 @@ const handleCancel = () => {
 
 const handleConfirm = () => {
   centerDialogVisible.value = false;
-  initVideo();
+  initVideo({
+    videoId: undefined,
+  });
 };
 
 const handleSnapshot = () => {
@@ -156,6 +170,14 @@ const handleSnapshot = () => {
     ?.getContext("2d")
     ?.drawImage(player?.value as HTMLVideoElement, 0, 0, 200, 200);
 };
+
+watch(videoSourceValue, async (newVideoId, oldVideoId) => {
+  if (oldVideoId) {
+    initVideo({
+      videoId: newVideoId,
+    });
+  }
+});
 
 onUnmounted(() => {
   if (mediaStreamTrack.value && mediaStreamTrack.value.getTracks) {
