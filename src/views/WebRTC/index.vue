@@ -158,7 +158,7 @@ const handleSnapshot = () => {
 };
 
 onUnmounted(() => {
-  if (mediaStreamTrack.value) {
+  if (mediaStreamTrack.value && mediaStreamTrack.value.getTracks) {
     mediaStreamTrack.value.getTracks()[0].stop();
     mediaStreamTrack.value.getTracks()[1].stop();
   }

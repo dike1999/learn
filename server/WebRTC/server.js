@@ -25,7 +25,14 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connection");
+  console.log("a user connection", socket.id);
+  socket.on("disconnect", () => {
+    console.log("user disconnected", socket.id);
+  });
+  socket.on("chat message", (msg) => {
+    console.log(`${socket.id}: ${msg}`);
+    io.emit("message", `${socket.id}: ${msg}`);
+  });
 });
 
 http_server.listen(PORT, () => {
