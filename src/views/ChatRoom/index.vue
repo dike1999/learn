@@ -72,7 +72,8 @@ const messages = reactive({
 });
 
 onMounted(() => {
-  socket.value = io("ws://127.0.0.1:8000");
+  socket.value = io("wss://127.0.0.1:8000");
+
   socket.value.on("message", (msg) => {
     messages.list.push(msg);
   });

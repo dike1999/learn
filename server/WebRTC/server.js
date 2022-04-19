@@ -1,11 +1,18 @@
 /* eslint-disable no-undef */
-const http = require("http");
+const https = require("https");
 const express = require("express");
+const fs = require("fs");
+const path = require("path");
 const { Server } = require("socket.io");
 
+const options = {
+  key: fs.readFileSync(path.resolve(__dirname, "./ssl/im.coderdi.top.key")),
+  cert: fs.readFileSync(path.resolve(__dirname, "./ssl/im.coderdi.top.pem")),
+};
+
 const app = express();
-const http_server = http.createServer(app);
-const io = new Server(http_server, {
+const https_server = https.createServer(options, app);
+const io = new Server(https_server, {
   cors: true,
 });
 const PORT = 8000;
@@ -35,6 +42,6 @@ io.on("connection", (socket) => {
   });
 });
 
-http_server.listen(PORT, () => {
-  console.log(`listening on http://127.0.0.1:${PORT}`);
+https_server.listen(PORT, "0.0.0.0", () => {
+  console.log(`listening on https://127.0.0.1:${PORT}`);
 });
