@@ -153,8 +153,9 @@ const initVideo = ({
 const handleCancel = () => {
   centerDialogVisible.value = false;
   if (mediaStreamTrack.value.getTracks) {
-    mediaStreamTrack.value.getTracks()[0].stop();
-    mediaStreamTrack.value.getTracks()[1].stop();
+    mediaStreamTrack.value.getTracks().forEach((track) => {
+      track.stop();
+    });
   }
 };
 
@@ -181,8 +182,9 @@ watch(videoSourceValue, async (newVideoId, oldVideoId) => {
 
 onUnmounted(() => {
   if (mediaStreamTrack.value && mediaStreamTrack.value.getTracks) {
-    mediaStreamTrack.value.getTracks()[0].stop();
-    mediaStreamTrack.value.getTracks()[1].stop();
+    mediaStreamTrack.value.getTracks().forEach((track) => {
+      track.stop();
+    });
   }
 });
 </script>
