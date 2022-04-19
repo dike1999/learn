@@ -140,7 +140,10 @@ const initVideo = ({
           facingMode: "enviroment",
           deviceId: videoId,
         },
-        audio: false,
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+        },
       })
       .then(setMediaStream)
       .then(setDevicesInfo)

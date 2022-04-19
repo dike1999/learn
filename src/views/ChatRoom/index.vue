@@ -1,5 +1,6 @@
 <template>
   <div class="ChatRoom">
+    <div class="wsMsg">{{ wsMsg }}</div>
     <ul id="messages">
       <template v-for="(message, index) in messages.list" :key="index">
         <li>{{ message }}</li>
@@ -39,6 +40,7 @@ import type { FormInstance } from "element-plus";
 import { io } from "socket.io-client";
 import type { Socket } from "socket.io-client";
 
+const wsMsg = ref("");
 const wsFormRef = ref<FormInstance>();
 
 const checkMessage = (rule: any, value: string, callback: any) => {
@@ -79,6 +81,19 @@ const messages = reactive({
 onMounted(() => {
   socket.value = io(`https://${window.location.hostname}:8000`);
 
+  socket.value.on("connect", () => {
+    wsMsg.value = `用户ID: ${socket.value?.id}`;
+    console.log(socket.value?.id);
+  });
+  socket.value.on("connect_error", () => {
+    setTimeout(() => {
+      wsMsg.value = "错误信息: Connect_Error";
+    }, 2000);
+  });
+  socket.value.on("disconnect", () => {
+    console.log(socket.value?.id); // undefined
+  });
+
   socket.value.on("message", (msg) => {
     messages.list.push(msg);
   });
@@ -92,6 +107,9 @@ onUnmounted(() => {
 </script>
 <style lang="less" scoped>
 .ChatRoom {
+  .wsMsg {
+    color: rgb(68, 0, 255);
+  }
   .wsForm {
     display: flex;
     justify-content: space-between;
