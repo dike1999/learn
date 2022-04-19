@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
-const https = require("https");
-const fs = require("fs");
+const http = require("http");
 const express = require("express");
-const socketIO = require("socket.io")();
+const { Server } = require("socket.io");
 const log4js = require("log4js");
+const PORT = 8000;
 
 log4js.configure({
   appenders: {
@@ -26,15 +26,28 @@ log4js.configure({
 const logger = log4js.getLogger();
 
 const app = express();
+const http_server = http.createServer(app);
 
-const options = {
-  key: fs.readFileSync("./ssl/im.coderdi.top.key"),
-  cert: fs.readFileSync("./ssl/im.coderdi.top.pem"),
-};
+app.all("*", function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type, Authorization"
+  );
+  next();
+});
+app.get("/", function (req, res) {
+  res.end("ok");
+});
 
-const https_server = https.createServer(options, app);
-const io = socketIO.listen(https_server);
+const io = new Server(http_server, {
+  cors: true,
+});
+
 io.sockets.on("connection", (socket) => {
+  console.log("a user connection");
+
   socket.on("join", (room) => {
     socket.join(room);
     const rooms = io.sockets.adapter.rooms[room];
@@ -53,9 +66,11 @@ io.sockets.on("connection", (socket) => {
     socket.leave(room);
     socket.to(room).emit("bye", room, socket.id); // 除自己以外
     socket.emit("leaved", room, socket.id);
-    // io.in(room).emit("joined", room, socket.id);
+    // io.in(room).emit("leaved", room, socket.id);
     // socket.broadcast.emit("leaved", room, socket.id);
   });
 });
 
-https_server.listen(5454, "0.0.0.0");
+http_server.listen(PORT, "0.0.0.0", () => {
+  console.log(`listening on http://127.0.0.1:${PORT}`);
+});
