@@ -56,7 +56,7 @@ const rules = reactive({
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
-    if (valid) {
+    if (valid && socket.value) {
       socket.value.emit("chat message", wsForm.message);
       wsFormRef.value?.resetFields();
     } else {
