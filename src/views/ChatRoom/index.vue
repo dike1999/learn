@@ -15,12 +15,17 @@
       class="wsForm"
       size="large"
       :inline="true"
+      @submit.prevent
     >
       <el-form-item prop="message" class="message">
         <el-input v-model.number="wsForm.message" />
       </el-form-item>
       <el-form-item class="sumbit">
-        <el-button type="primary" @click="submitForm(wsFormRef)">
+        <el-button
+          type="primary"
+          @click="submitForm(wsFormRef)"
+          native-type="submit"
+        >
           发送
         </el-button>
       </el-form-item>
@@ -72,7 +77,7 @@ const messages = reactive({
 });
 
 onMounted(() => {
-  socket.value = io("wss://127.0.0.1:8000");
+  socket.value = io(`https://${window.location.hostname}:8000`);
 
   socket.value.on("message", (msg) => {
     messages.list.push(msg);

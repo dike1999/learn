@@ -27,12 +27,10 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
-    terserOptions: {
-      compress: {
-        // 生产环境时移除console
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
+  },
+  server: {
+    host: true,
+    port: 3000,
+    https: true,
   },
 });
