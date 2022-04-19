@@ -32,6 +32,7 @@
 import { ref, reactive, onUnmounted, onMounted } from "vue";
 import type { FormInstance } from "element-plus";
 import { io } from "socket.io-client";
+import type { Socket } from "socket.io-client";
 
 const wsFormRef = ref<FormInstance>();
 
@@ -65,19 +66,22 @@ const submitForm = (formEl: FormInstance | undefined) => {
   });
 };
 
-const socket = ref(io("ws://127.0.0.1:8000"));
+const socket = ref<Socket | null>();
 const messages = reactive({
   list: [] as string[],
 });
 
 onMounted(() => {
+  socket.value = io("ws://127.0.0.1:8000");
   socket.value.on("message", (msg) => {
     messages.list.push(msg);
   });
 });
 
 onUnmounted(() => {
-  socket.value.close();
+  if (socket.value) {
+    socket.value.close();
+  }
 });
 </script>
 <style lang="less" scoped>
