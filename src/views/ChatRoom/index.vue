@@ -79,7 +79,8 @@ const messages = reactive({
 });
 
 onMounted(() => {
-  socket.value = io(`https://${window.location.hostname}:6789`);
+  const hostname = window.location.hostname;
+  socket.value = io(`https://${hostname}:6789`);
 
   socket.value.on("connect", () => {
     wsMsg.value = `用户ID: ${socket.value?.id}`;
