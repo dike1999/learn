@@ -1,57 +1,58 @@
 <template>
-  <div class="webRTC">
+  <div class="WebRTC">
     <h1>This is an WebRTC page</h1>
     <video width="200" height="200" autoplay id="player" ref="player" />
-    <div style="display: flex">
-      <div>
-        <label>audio Source:</label>
-        <el-select
-          disabled
-          v-model="audioSourceValue"
-          class="m-2"
-          placeholder="Select"
-        >
-          <el-option
-            v-for="item in devicesInfo.audioSource"
-            :key="item.deviceId"
-            :label="item.label"
-            :value="item.deviceId"
-          />
-        </el-select>
-      </div>
-
-      <div>
-        <label>audio Output:</label>
-        <el-select
-          disabled
-          v-model="audioOutputValue"
-          class="m-2"
-          placeholder="Select"
-        >
-          <el-option
-            v-for="item in devicesInfo.audioOutput"
-            :key="item.deviceId"
-            :label="item.label"
-            :value="item.deviceId"
-          />
-        </el-select>
-      </div>
-
-      <div>
-        <label>video Source:</label>
-        <el-select v-model="videoSourceValue" class="m-2" placeholder="Select">
-          <el-option
-            v-for="item in devicesInfo.videoSource"
-            :key="item.deviceId"
-            :label="item.label"
-            :value="item.deviceId"
-          />
-        </el-select>
-      </div>
-    </div>
-    <el-button type="primary" @click="handleSnapshot">截图</el-button>
   </div>
-  <div>{{ errMsg }}</div>
+
+  <div class="errMsg">{{ errMsg }}</div>
+
+  <div class="selectDevice">
+    <div>
+      <label>audio Source:</label>
+      <el-select
+        disabled
+        v-model="audioSourceValue"
+        class="m-2"
+        placeholder="Select"
+      >
+        <el-option
+          v-for="item in devicesInfo.audioSource"
+          :key="item.deviceId"
+          :label="item.label"
+          :value="item.deviceId"
+        />
+      </el-select>
+    </div>
+
+    <div>
+      <label>audio Output:</label>
+      <el-select
+        disabled
+        v-model="audioOutputValue"
+        class="m-2"
+        placeholder="Select"
+      >
+        <el-option
+          v-for="item in devicesInfo.audioOutput"
+          :key="item.deviceId"
+          :label="item.label"
+          :value="item.deviceId"
+        />
+      </el-select>
+    </div>
+
+    <div>
+      <label>video Source:</label>
+      <el-select v-model="videoSourceValue" class="m-2" placeholder="Select">
+        <el-option
+          v-for="item in devicesInfo.videoSource"
+          :key="item.deviceId"
+          :label="item.label"
+          :value="item.deviceId"
+        />
+      </el-select>
+    </div>
+  </div>
 
   <div class="dialog">
     <el-button type="text" @click="centerDialogVisible = true"
@@ -67,7 +68,11 @@
       </template>
     </el-dialog>
   </div>
-  <canvas width="200" height="200" ref="picture" />
+
+  <div class="snapshot">
+    <el-button type="primary" @click="handleSnapshot">截图</el-button>
+    <canvas width="200" height="200" ref="picture" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -191,4 +196,10 @@ onUnmounted(() => {
   }
 });
 </script>
-<style scoped></style>
+<style scoped lang="less">
+.dialog,
+.snapshot,
+.selectDevice {
+  display: none;
+}
+</style>
