@@ -2,20 +2,40 @@
   <div class="WebRTC">
     <h1>This is an WebRTC page</h1>
     <div class="videos">
-      <video
-        autoplay
-        height="300"
-        width="300"
-        id="localVideo"
-        ref="localVideo"
-      />
-      <video
-        autoplay
-        height="300"
-        width="300"
-        id="remoteVideo"
-        ref="remoteVideo"
-      />
+      <div class="video">
+        <h3 class="title">Local</h3>
+        <video
+          autoplay
+          height="300"
+          width="300"
+          id="localVideo"
+          ref="localVideo"
+        />
+        <h3 class="title">OfferSDP</h3>
+        <el-input
+          v-model="offerSDP"
+          :autosize="{ minRows: 2, maxRows: 8 }"
+          type="textarea"
+          placeholder="OfferSDP"
+        />
+      </div>
+      <div class="video">
+        <h3 class="title">Remote</h3>
+        <video
+          autoplay
+          height="300"
+          width="300"
+          id="remoteVideo"
+          ref="remoteVideo"
+        />
+        <h3 class="title">AnswerSDP</h3>
+        <el-input
+          v-model="answerSDP"
+          :autosize="{ minRows: 2, maxRows: 8 }"
+          type="textarea"
+          placeholder="AnswerSDP"
+        />
+      </div>
     </div>
     <div class="buttons">
       <el-button
@@ -62,6 +82,8 @@ const loaclMediaStream = ref<MediaStream>({} as MediaStream);
 const connection1 = ref<RTCPeerConnection | null>();
 const connection2 = ref<RTCPeerConnection | null>();
 
+const offerSDP = ref("");
+const answerSDP = ref("");
 const errMsg = ref("");
 
 // 页面交互相关
@@ -99,8 +121,8 @@ const handleStart = () => {
 };
 
 const getAnswer = (desc: any) => {
-  console.log("remote", desc);
   connection2.value?.setLocalDescription(desc);
+  answerSDP.value = desc.sdp;
   // send desc to signal
   // receive desc from signal
   connection1.value?.setRemoteDescription(desc);
@@ -108,7 +130,7 @@ const getAnswer = (desc: any) => {
 
 const getLocalDescription = (desc: any) => {
   connection1.value?.setLocalDescription(desc);
-  console.log("local", desc);
+  offerSDP.value = desc.sdp;
   // send desc to signal
   // receive desc from signal
   connection2.value?.setRemoteDescription(desc);
@@ -165,6 +187,8 @@ const handleHangUp = () => {
   isDisable.start = false;
   isDisable.call = true;
   isDisable.hangup = true;
+  offerSDP.value = "";
+  answerSDP.value = "";
 };
 
 onUnmounted(() => {
@@ -181,6 +205,12 @@ onUnmounted(() => {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    .video {
+      flex: auto;
+      .title {
+        text-align: center;
+      }
+    }
   }
   .buttons {
     display: flex;
