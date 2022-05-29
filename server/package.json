@@ -7,7 +7,7 @@
     "serve": "cd WebRTC && node server.js"
   },
   "dependencies": {
-    "express": "^4.18.0",
-    "socket.io": "^4.5.0"
+    "express": "^4.18.1",
+    "socket.io": "^4.5.1"
   }
 }
