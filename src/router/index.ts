@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: "/webrtc",
       name: "WebRTC",
-      component: () => import("../views/WebRTC/index.vue"),
+      component: () => import("../views/WebRTC/record.vue"),
     },
     {
       path: "/three",
