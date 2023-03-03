@@ -27,7 +27,7 @@ import { RouterLink, RouterView } from "vue-router";
 </template>
 
 <style lang="less">
-@import "@/assets/base.css";
+@import "./assets/base.css";
 
 .grid-content {
   display: flex;

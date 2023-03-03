@@ -1,8 +1,7 @@
-import { fileURLToPath, URL } from "url";
-
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
@@ -21,12 +20,8 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
+    basicSsl(),
   ],
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
-    },
-  },
   build: {
     outDir: "dist",
     emptyOutDir: true,
