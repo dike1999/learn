@@ -3,5 +3,5 @@
 </template>
 
 <script lang="ts" setup>
-import Demo from "./Learn/demo1.vue";
+import Demo from "./Chapter01/BasicSkeleton.vue";
 </script>
