@@ -30,6 +30,21 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
+    assetsDir: "static",
+    rollupOptions: {
+      output: {
+        entryFileNames: `static/js/[name]-[format].js`,
+        chunkFileNames: `static/js/[name]-[format].js`,
+        assetFileNames: `static/[ext]/[name][extname]`,
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return "vendor"; //代码分割为第三方包
+          } else if (id.includes("src/views")) {
+            return "views"; //代码分割为业务视图
+          }
+        },
+      },
+    },
   },
   server: {
     host: true,
