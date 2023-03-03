@@ -26,6 +26,11 @@ const router = createRouter({
       name: "ChatRoom",
       component: () => import("../views/ChatRoom/index.vue"),
     },
+    {
+      path: "/rabbit",
+      name: "Rabbit",
+      component: () => import("../views/Rabbit/index.vue"),
+    },
   ],
 });
 
