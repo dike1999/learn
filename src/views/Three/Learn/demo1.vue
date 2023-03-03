@@ -86,7 +86,7 @@ const init = () => {
   // 配置渲染器清除颜色
   renderer.setClearColor("#000");
   // 配置渲染器尺寸
-  renderer.setSize(window.innerWidth, window.innerHeight - 36);
+  renderer.setSize(window.innerWidth, window.innerHeight);
   // 添加渲染器到DOM
   threeRef.value?.appendChild(renderer.domElement);
 
