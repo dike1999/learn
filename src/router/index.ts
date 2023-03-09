@@ -27,9 +27,9 @@ const router = createRouter({
       component: () => import("../views/ChatRoom/index.vue"),
     },
     {
-      path: "/rabbit",
-      name: "Rabbit",
-      component: () => import("../views/Rabbit/index.vue"),
+      path: "/peer",
+      name: "Peer",
+      component: () => import("../views/Peer/index.vue"),
     },
   ],
 });

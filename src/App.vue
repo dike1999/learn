@@ -5,8 +5,8 @@ import { RouterLink, RouterView } from "vue-router";
 <template>
   <el-row>
     <el-col :span="6">
-      <RouterLink class="grid-content bg-purple-light" to="/rabbit">
-        Rabbit
+      <RouterLink class="grid-content bg-purple-light" to="/peer">
+        Peer
       </RouterLink>
     </el-col>
     <el-col :span="6">

@@ -1,6 +1,6 @@
 <template>
-  <div class="rabbit">
-    <h1>rabbit page</h1>
+  <div class="peer">
+    <h1>peer page</h1>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ import { ref, reactive } from "vue";
 </script>
 
 <style scoped lang="less">
-.home {
+.peer {
   display: flex;
   justify-content: center;
   align-items: center;
