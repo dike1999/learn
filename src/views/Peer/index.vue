@@ -10,8 +10,9 @@ import Peer from "peerjs";
 
 const peer = ref<Peer>(
   new Peer({
-    host: "coturn.coderdi.top",
+    host: "101.201.140.172",
     path: "peer",
+    port: "9011",
   })
 );
 </script>
