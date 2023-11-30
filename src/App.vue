@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <el-row>
+  <!-- <el-row>
     <el-col :span="6">
       <RouterLink class="grid-content bg-purple-light" to="/peer">
         Peer
@@ -22,7 +22,7 @@ import { RouterLink, RouterView } from "vue-router";
     <el-col :span="6">
       <RouterLink class="grid-content bg-purple" to="/">Home</RouterLink>
     </el-col>
-  </el-row>
+  </el-row> -->
   <RouterView />
 </template>
 
