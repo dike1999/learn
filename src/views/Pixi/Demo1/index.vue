@@ -1,53 +1,59 @@
 <template>
   <h1>
-    PixiJS {{ PIXI.VERSION }}
-    {{ PIXI.utils.isWebGLSupported() ? "WebGL" : "Canvas" }}
+    PixiJS {{ VERSION }}
+    {{ utils.isWebGLSupported() ? "WebGL" : "Canvas" }}
   </h1>
-  <div style="margin-top: 20px">
-    <button class="start-btn" @click="onStart">开始</button>
-    <button class="stop-btn" @click="onStop">停止</button>
-  </div>
+
   <div class="pixi" ref="pixiRef"></div>
 </template>
 
 <script setup lang="ts">
-import * as PIXI from "pixi.js";
+import { Application, utils, VERSION, Graphics, Sprite } from "pixi.js";
 import { onMounted, ref } from "vue";
 const pixiRef = ref<HTMLElement>();
-
-const app = ref<PIXI.Application>(); // 一个Pixi应用
-
-function onStart() {
-  console.log("onStart");
-}
-function onStop() {
-  console.log("onStop");
-}
 onMounted(() => {
-  app.value = new PIXI.Application({ width: 256, height: 256 });
-  pixiRef.value?.appendChild(app.value.view);
+  const app = new Application({
+    width: 300,
+    height: 300,
+    antialias: true,
+    transparent: false,
+    resolution: 1,
+    backgroundColor: 0x1d9ce0,
+  });
+  pixiRef.value?.appendChild(app.view);
+
+  // 创建一个半径为32px的圆
+  const circle = new Graphics();
+  circle.beginFill(0xfb6a8f);
+  circle.drawCircle(0, 0, 32);
+  circle.endFill();
+  circle.x = 32;
+  circle.y = 32;
+  // 添加到app.stage里，从而可以渲染出来
+  app.stage.addChild(circle);
+
+  // 创建一个图片精灵
+  const avatar = new Sprite.from(
+    "https://s2-11673.kwimgs.com/kos/nlav11673/static/img/widgets/header/img/logo-4df74d39.png"
+  );
+  // 图片宽高缩放0.5
+  avatar.scale.set(0.5, 0.5);
+  avatar.x = 125;
+  avatar.y = 125;
+  avatar.interactive = true; // 可交互
+  avatar.on("click", () => {
+    avatar.alpha = 0.5; // 透明度
+  });
+  // 修改旋转中心为图片中心
+  avatar.anchor.set(0.5, 0.5);
+  app.stage.addChild(avatar);
+  app.ticker.add(() => {
+    // 每秒调用该方法60次(60帧动画)
+    avatar.rotation += 0.01;
+  });
+
+  app.stage.addChild(avatar);
 });
 </script>
 
-<style scoped lang="less">
-.start-btn,
-.stop-btn {
-  display: inline-block;
-  color: #fff;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  padding: 10px 20px;
-  margin-bottom: 30px;
-}
-.start-btn {
-  background-color: #ff0081;
-  box-shadow: 0 2px 25px rgba(255, 0, 130, 0.5);
-}
-.stop-btn {
-  background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
-  margin-left: 20px;
-  box-shadow: 0 2px 25px rgba(22, 217, 227, 0.5);
-}
-</style>
+<style scoped lang="less"></style>
