@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import Demo from "./Demo1/index.vue";
+import Demo from "./Demo2/index.vue";
 </script>
 
 <style scoped lang="less"></style>
